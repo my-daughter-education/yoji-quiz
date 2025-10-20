@@ -100,19 +100,18 @@ h1 {
 }
 
 .turtle {
+  display: block; /* ←常に表示 */
   width: 140px;
   height: auto;
-  display: none;
   margin: 15px auto;
-  transition: transform 0.3s;
   position: relative;
+  transform-origin: center;
 }
 
-/* 正解時の歩くアニメーション */
 .turtle.walk {
-  display: block;
   animation: walk 1s ease-in-out infinite alternate;
 }
+
 
 @keyframes walk {
   0% { transform: translateX(0px) rotate(0deg); }
@@ -142,3 +141,4 @@ canvas#scoreChart {
   padding: 10px;
   border: 2px solid #2e8b57;
 }
+
