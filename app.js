@@ -301,16 +301,9 @@ function handleAnswer(btn, q) {
     score++;
     resultDiv.textContent = '正解！';
     
-    // 亀画像の選択
-    if (score === 10) {
-      turtleImg.src = 'special_turtle.png'; // ← 4枚目の特別画像
-    } else if (score <= 3) {
-      turtleImg.src = 'baby_turtle.png';
-    } else if (score <= 6) {
-      turtleImg.src = 'middle_turtle.png';
-    } else {
-      turtleImg.src = 'adult_turtle.png';
-    }
+    if (score <=3) turtleImg.src='baby_turtle.png';
+    else if (score<=6) turtleImg.src='middle_turtle.png';
+    else turtleImg.src='adult_turtle.png';
     turtleImg.style.display='block';
   } else {
     btn.classList.add('wrong');
