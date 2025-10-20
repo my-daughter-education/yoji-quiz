@@ -1,54 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>四字熟語クイズ</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四字熟語クイズ</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>四字熟語クイズ</h1>
+  <h1>四字熟語クイズ</h1>
 
-    <!-- モード選択 -->
-    <div id="modeSelect">
-      <button onclick="setMode('meaning')">意味から選ぶ</button>
-      <button onclick="setMode('word')">四字熟語から意味を選ぶ</button>
-    </div>
-
-    <!-- 難易度選択 -->
-    <div id="levelSelect">
-      <button onclick="setLevel('easy')">やさしい</button>
-      <button onclick="setLevel('normal')">ふつう</button>
-      <button onclick="setLevel('hard')">むずかしい</button>
-      <button onclick="setLevel('all')">すべて</button>
-    </div>
-
-    <!-- ステータス表示 -->
-    <div id="status">
-      <span id="score">正解: 0</span> | 
-      <span id="questionNumber">問題: 0 / 0</span>
-    </div>
-
-    <!-- 問題・選択肢・結果 -->
-    <div id="question"></div>
-    <div id="choices"></div>
-    <div id="result"></div>
-
-    <!-- 履歴 -->
-    <div id="history">
-      <h2>履歴</h2>
-      <ul id="historyList"></ul>
-    </div>
-
-    <!-- 正解率グラフ -->
-    <div id="chartContainer">
-      <h2>正解率グラフ</h2>
-      <canvas id="scoreChart" width="400" height="200"></canvas>
-    </div>
+  <div id="controls">
+    <button onclick="setMode('meaning')">意味→四字熟語</button>
+    <button onclick="setMode('word')">四字熟語→意味</button>
+    <select onchange="setLevel(this.value)">
+      <option value="all">全難易度</option>
+      <option value="easy">やさしい</option>
+      <option value="normal">ふつう</option>
+      <option value="hard">むずかしい</option>
+    </select>
   </div>
 
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div id="status">
+    <span id="score">正解: 0</span> | 
+    <span id="questionNumber">問題: 1 / 70</span>
+  </div>
+
+  <div id="question">ここに問題が表示されます</div>
+  <div id="choices"></div>
+  <div id="result"></div>
+
+  <h2>履歴</h2>
+  <ul id="historyList"></ul>
+
+  <h2>正解グラフ</h2>
+  <canvas id="scoreChart" width="400" height="150"></canvas>
+
   <script src="app.js"></script>
 </body>
 </html>
