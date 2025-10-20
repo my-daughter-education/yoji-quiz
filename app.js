@@ -1,7 +1,7 @@
 // --------------------------
 // JSON データを直接埋め込み（最終版70問サンプル）
 // --------------------------
-let quizData = [
+const quizData = [
   {"id":1,"word":"以心伝心","reading":"いしんでんしん","meaning":"言葉に出さなくても心が通じ合うこと","example":"親友とは以心伝心の仲だ","level":"easy"},
   {"id":2,"word":"一石二鳥","reading":"いっせきにちょう","meaning":"一つの行動で二つの利益を得ること","example":"散歩すれば運動にもなるし気分も良い、一石二鳥だ","level":"easy"},
   {"id":3,"word":"一期一会","reading":"いちごいちえ","meaning":"一生に一度の出会いを大切にすること","example":"今日の出会いを一期一会と思おう","level":"easy"},
@@ -204,161 +204,163 @@ let quizData = [
   {"id":200,"word":"泰然自若","reading":"たいぜんじじゃく","meaning":"落ち着いて動じないこと","example":"泰然自若の態度で対処する","level":"hard"},
 ];
 
-// --------------------------
-// 以下、以前の完成版 app.js と同じロジック
-// --------------------------
-let filteredData = [];
-let currentQuestion = 0;
-let score = 0;
-let mode = 'meaning';
-let level = 'all';
-let historyData = [];
-let scoreChart;
+// グローバル変数
+let PLAY_COUNT = 10;
+let playData = [], filteredData = [], currentQuestion = 0, score = 0;
+let mode = 'meaning', level = 'all', historyData = [], scoreChart;
+let showReading = true;
 
+// 初期化
 setLevel('all');
 
+// モード設定
 function setMode(newMode) {
   mode = newMode;
-  currentQuestion = 0;
-  score = 0;
-  historyData = [];
-  document.getElementById('historyList').innerHTML = '';
-  showQuestion();
-  updateStatus();
+  startNewPlay();
 }
 
+// 難易度設定
 function setLevel(newLevel) {
   level = newLevel;
-  currentQuestion = 0;
-  score = 0;
+  startNewPlay();
+}
+
+// 読み仮名表示切替
+function toggleReading() {
+  showReading = !showReading;
+  showQuestion();
+}
+
+// 新しいプレイ開始（10問）
+function startNewPlay() {
   historyData = [];
   document.getElementById('historyList').innerHTML = '';
+  currentQuestion = 0;
+  score = 0;
 
-  if(level === 'all') {
-    filteredData = [...quizData];
-  } else {
-    filteredData = quizData.filter(item => item.level === level);
-  }
-
+  filteredData = (level==='all') ? [...quizData] : quizData.filter(item=>item.level===level);
   shuffleArray(filteredData);
+  playData = filteredData.slice(0, PLAY_COUNT);
+
   showQuestion();
   updateStatus();
 }
 
+// 問題表示
 function showQuestion() {
-  const q = filteredData[currentQuestion];
+  const q = playData[currentQuestion];
   const questionDiv = document.getElementById('question');
   const choicesDiv = document.getElementById('choices');
   const resultDiv = document.getElementById('result');
+  const turtleImg = document.getElementById('turtle');
 
-  if(!q){
-    questionDiv.textContent = "問題がありません";
-    choicesDiv.innerHTML = '';
-    return;
-  }
+  if (!q) { questionDiv.textContent = "問題がありません"; choicesDiv.innerHTML = ''; return; }
 
   choicesDiv.innerHTML = '';
   resultDiv.textContent = '';
+  turtleImg.style.display = 'none';
 
   let choices = [];
-  if(mode === 'meaning'){
-    questionDiv.textContent = `次の意味に合う四字熟語はどれ？\n「${q.meaning}」`;
-    choices.push(q.word);
-    while(choices.length < 4){
-      const randomWord = filteredData[Math.floor(Math.random() * filteredData.length)].word;
-      if(!choices.includes(randomWord)) choices.push(randomWord);
+
+  if (mode==='meaning') {
+    questionDiv.innerHTML = `次の意味に合う四字熟語はどれ？<br>「${q.meaning}」`;
+    choices.push(showReading ? `${q.word}（${q.reading}）` : q.word);
+    while (choices.length<4) {
+      const r = playData[Math.floor(Math.random()*playData.length)];
+      if (!choices.includes(showReading ? `${r.word}（${r.reading}）` : r.word)) choices.push(showReading ? `${r.word}（${r.reading}）` : r.word);
     }
   } else {
-    questionDiv.textContent = `次の四字熟語の意味はどれ？\n「${q.word}」`;
+    questionDiv.innerHTML = `次の四字熟語の意味はどれ？<br>${showReading ? `${q.word}（${q.reading}）` : q.word}`;
     choices.push(q.meaning);
-    while(choices.length < 4){
-      const randomMeaning = filteredData[Math.floor(Math.random() * filteredData.length)].meaning;
-      if(!choices.includes(randomMeaning)) choices.push(randomMeaning);
+    while (choices.length<4) {
+      const r = playData[Math.floor(Math.random()*playData.length)];
+      if (!choices.includes(r.meaning)) choices.push(r.meaning);
     }
   }
 
   shuffleArray(choices);
 
-  choices.forEach(choice => {
+  choices.forEach(choice=>{
     const btn = document.createElement('button');
     btn.textContent = choice;
-    btn.onclick = () => handleAnswer(btn, q);
+    btn.onclick = ()=>handleAnswer(btn, q);
     choicesDiv.appendChild(btn);
   });
 }
 
-function handleAnswer(btn, q){
+// 正解判定＆リクガメ表示
+function handleAnswer(btn, q) {
   const choicesDiv = document.getElementById('choices');
   const resultDiv = document.getElementById('result');
-  const correctAnswer = mode==='meaning'?q.word:q.meaning;
-  const isCorrect = btn.textContent === correctAnswer;
+  const turtleImg = document.getElementById('turtle');
+  const correctAnswer = mode==='meaning' ? q.word : q.meaning;
+  const userAnswer = mode==='meaning' ? btn.textContent.replace(/\（.*\）/,'') : btn.textContent;
+  const isCorrect = userAnswer === correctAnswer;
 
-  if(isCorrect){
+  if (isCorrect) {
     btn.classList.add('correct');
     score++;
     resultDiv.textContent = '正解！';
+    if (score <=3) turtleImg.src='baby_turtle.png';
+    else if (score<=6) turtleImg.src='middle_turtle.png';
+    else turtleImg.src='adult_turtle.png';
+    turtleImg.style.display='block';
   } else {
     btn.classList.add('wrong');
     resultDiv.textContent = `不正解… 正解は「${correctAnswer}」`;
-    Array.from(choicesDiv.children).forEach(b => {
-      if(b.textContent === correctAnswer) b.classList.add('correct');
+    Array.from(choicesDiv.children).forEach(b=>{
+      const val = mode==='meaning' ? b.textContent.replace(/\（.*\）/,'') : b.textContent;
+      if (val===correctAnswer) b.classList.add('correct');
     });
+    turtleImg.style.display='none';
   }
 
   recordHistory(isCorrect);
   updateStatus();
 
-  setTimeout(() => {
+  setTimeout(()=>{
     currentQuestion++;
-    if(currentQuestion >= filteredData.length){
-      alert(`終了！正解数: ${score} / ${filteredData.length}`);
-      currentQuestion = 0;
-      score = 0;
-      historyData = [];
-      document.getElementById('historyList').innerHTML = '';
-      shuffleArray(filteredData);
+    if (currentQuestion>=PLAY_COUNT){
+      alert(`終了！正解数: ${score} / ${PLAY_COUNT}`);
+      startNewPlay();
+    } else {
+      turtleImg.style.display='none';
+      showQuestion();
     }
-    showQuestion();
-  }, 2000);
+  },2000);
 }
 
-function recordHistory(correct){
-  historyData.push({ question: currentQuestion + 1, correct: correct });
-
+// 履歴とグラフ
+function recordHistory(correct) {
+  historyData.push({question: currentQuestion+1, correct});
   const historyList = document.getElementById('historyList');
   const li = document.createElement('li');
-  li.textContent = `問題${currentQuestion+1}: ${correct ? '正解' : '不正解'}`;
+  li.textContent = `問題${currentQuestion+1}: ${correct?'正解':'不正解'}`;
   historyList.appendChild(li);
-
   updateChart();
 }
 
-function updateChart(){
-  const labels = historyData.map((_, i) => i+1);
-  const data = historyData.map(h => h.correct ? 1 : 0);
-
-  if(!scoreChart){
+function updateChart() {
+  const labels = historyData.map((_,i)=>i+1);
+  const data = historyData.map(h=>h.correct?1:0);
+  if (!scoreChart){
     const ctx = document.getElementById('scoreChart').getContext('2d');
-    scoreChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: '正解=1, 不正解=0',
-          data: data,
-          borderColor: 'blue',
-          backgroundColor: 'rgba(0,0,255,0.1)',
-          tension: 0.3,
-          fill: true,
+    scoreChart = new Chart(ctx,{
+      type:'line',
+      data:{
+        labels,
+        datasets:[{
+          label:'正解=1, 不正解=0',
+          data,
+          borderColor:'blue',
+          backgroundColor:'rgba(0,0,255,0.1)',
+          tension:0.3,
+          fill:true
         }]
       },
-      options: {
-        scales: {
-          y: {
-            min: 0,
-            max: 1,
-            ticks: { stepSize: 1, callback: v => v ? '正解' : '不正解' }
-          }
+      options:{
+        scales:{
+          y:{min:0,max:1,ticks:{stepSize:1,callback:v=>v?'正解':'不正解'}}
         }
       }
     });
@@ -369,15 +371,16 @@ function updateChart(){
   }
 }
 
-function updateStatus(){
+// ステータス更新
+function updateStatus() {
   document.getElementById('score').textContent = `正解: ${score}`;
-  document.getElementById('questionNumber').textContent = `問題: ${currentQuestion+1} / ${filteredData.length}`;
+  document.getElementById('questionNumber').textContent = `問題: ${currentQuestion+1} / ${PLAY_COUNT}`;
 }
 
+// 配列シャッフル
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
