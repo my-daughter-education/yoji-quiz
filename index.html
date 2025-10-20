@@ -19,6 +19,7 @@
       <option value="normal">ふつう</option>
       <option value="hard">むずかしい</option>
     </select>
+    <button onclick="toggleReading()">読み仮名表示切替</button>
   </div>
 
   <div id="status">
@@ -29,6 +30,9 @@
   <div id="question">ここに問題が表示されます</div>
   <div id="choices"></div>
   <div id="result"></div>
+
+  <!-- 正解時のリクガメ -->
+  <img id="turtle" src="" alt="リクガメ" style="display:none; width:150px; margin:auto; display:block;">
 
   <h2>履歴</h2>
   <ul id="historyList"></ul>
