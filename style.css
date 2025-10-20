@@ -1,5 +1,5 @@
 body {
-  font-family: 'ヒラギノ角ゴシック', 'Hiragino Kaku Gothic Pro', Meiryo, sans-serif;
+  font-family: 'ヒラギノ角ゴシック', Meiryo, sans-serif;
   background: linear-gradient(to bottom, #a7e8af, #f0fff5);
   color: #333;
   text-align: center;
@@ -23,10 +23,6 @@ h1 {
   margin-bottom: 15px;
 }
 
-.controls {
-  margin-bottom: 15px;
-}
-
 .controls button, .controls select {
   margin: 5px;
   padding: 10px 15px;
@@ -42,11 +38,7 @@ h1 {
   background-color: #a0e0a0;
 }
 
-#status {
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-size: 16px;
-}
+#status { margin-bottom: 15px; font-weight: bold; font-size: 16px; }
 
 .question {
   font-size: 20px;
@@ -75,43 +67,25 @@ h1 {
   transition: 0.2s;
 }
 
-.choices button.correct {
-  background-color: #98fb98;
-  border-color: #006400;
-  transform: scale(1.05);
-}
+.choices button.correct { background-color: #98fb98; border-color: #006400; transform: scale(1.05); }
+.choices button.wrong { background-color: #ffb6b6; border-color: #8b0000; transform: scale(0.98); }
+.choices button:hover { background-color: #b0ffc0; }
 
-.choices button.wrong {
-  background-color: #ffb6b6;
-  border-color: #8b0000;
-  transform: scale(0.98);
-}
-
-.choices button:hover {
-  background-color: #b0ffc0;
-}
-
-.result {
-  font-size: 18px;
-  margin-bottom: 15px;
-  min-height: 24px;
-  font-weight: bold;
-  color: #333;
-}
+.result { font-size: 18px; margin-bottom: 15px; min-height: 24px; font-weight: bold; color: #333; }
 
 .turtle {
-  display: block; /* ←常に表示 */
   width: 140px;
   height: auto;
+  display: block;
   margin: 15px auto;
   position: relative;
   transform-origin: center;
 }
 
+/* 歩くアニメ */
 .turtle.walk {
   animation: walk 1s ease-in-out infinite alternate;
 }
-
 
 @keyframes walk {
   0% { transform: translateX(0px) rotate(0deg); }
@@ -141,4 +115,3 @@ canvas#scoreChart {
   padding: 10px;
   border: 2px solid #2e8b57;
 }
-
