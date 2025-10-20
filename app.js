@@ -300,9 +300,17 @@ function handleAnswer(btn, q) {
     btn.classList.add('correct');
     score++;
     resultDiv.textContent = '正解！';
-    if (score <=3) turtleImg.src='baby_turtle.png';
-    else if (score<=6) turtleImg.src='middle_turtle.png';
-    else turtleImg.src='adult_turtle.png';
+    
+    // 亀画像の選択
+    if (score === 10) {
+      turtleImg.src = 'special_turtle.png'; // ← 4枚目の特別画像
+    } else if (score <= 3) {
+      turtleImg.src = 'baby_turtle.png';
+    } else if (score <= 6) {
+      turtleImg.src = 'middle_turtle.png';
+    } else {
+      turtleImg.src = 'adult_turtle.png';
+    }
     turtleImg.style.display='block';
   } else {
     btn.classList.add('wrong');
@@ -383,5 +391,6 @@ function shuffleArray(array){
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
 
 
