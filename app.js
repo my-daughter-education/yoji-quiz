@@ -289,6 +289,8 @@ function showQuestion() {
 }
 
 // 正解判定＆リクガメ表示
+// 省略: quizData と shuffleArray は以前のまま
+
 function handleAnswer(btn, q) {
   const choicesDiv = document.getElementById('choices');
   const resultDiv = document.getElementById('result');
@@ -297,23 +299,21 @@ function handleAnswer(btn, q) {
   const userAnswer = mode==='meaning' ? btn.textContent.replace(/\（.*\）/,'') : btn.textContent;
   const isCorrect = userAnswer === correctAnswer;
 
-if (isCorrect) {
-  btn.classList.add('correct');
-  score++;
-  resultDiv.textContent = '正解！';
-  
-const turtleImg = document.getElementById('turtle');
-turtleImg.src = 'baby_turtle.png';
-turtleImg.classList.add('walk');
-setTimeout(() => turtleImg.classList.remove('walk'), 2000);
-} else {
+  if (isCorrect) {
+    btn.classList.add('correct');
+    score++;
+    resultDiv.textContent = '正解！';
+
+    if (score <=3) turtleImg.src='baby_turtle.png';
+    else if (score<=6) turtleImg.src='middle_turtle.png';
+    else turtleImg.src='adult_turtle.png';
+
+    turtleImg.classList.add('walk'); // 歩くアニメ追加
+    setTimeout(()=> turtleImg.classList.remove('walk'), 2000);
+
+  } else {
     btn.classList.add('wrong');
     resultDiv.textContent = `不正解… 正解は「${correctAnswer}」`;
-    Array.from(choicesDiv.children).forEach(b=>{
-      const val = mode==='meaning' ? b.textContent.replace(/\（.*\）/,'') : b.textContent;
-      if (val===correctAnswer) b.classList.add('correct');
-    });
-    turtleImg.style.display='none';
   }
 
   recordHistory(isCorrect);
@@ -325,11 +325,11 @@ setTimeout(() => turtleImg.classList.remove('walk'), 2000);
       alert(`終了！正解数: ${score} / ${PLAY_COUNT}`);
       startNewPlay();
     } else {
-      turtleImg.style.display='none';
       showQuestion();
     }
   },2000);
 }
+
 
 // 履歴とグラフ
 function recordHistory(correct) {
@@ -385,6 +385,7 @@ function shuffleArray(array){
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
 
 
 
