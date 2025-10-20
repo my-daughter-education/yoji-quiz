@@ -301,7 +301,8 @@ function handleAnswer(btn, q) {
     score++;
     resultDiv.textContent = '正解！';
     
-    if (score <=3) turtleImg.src='baby_turtle.png';
+    if (score ===10) turtleImg.src='man.png';
+    else if (score<=3) turtleImg.src='baby_turtle.png';
     else if (score<=6) turtleImg.src='middle_turtle.png';
     else turtleImg.src='adult_turtle.png';
     turtleImg.style.display='block';
@@ -384,6 +385,7 @@ function shuffleArray(array){
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
 
 
 
