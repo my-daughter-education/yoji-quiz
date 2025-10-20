@@ -8,41 +8,41 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="container">
-  <h1>四字熟語クイズ</h1>
+  <div class="container">
+    <h1>四字熟語クイズ</h1>
+    
+    <div class="controls">
+      <button onclick="setMode('meaning')">意味から四字熟語</button>
+      <button onclick="setMode('word')">四字熟語から意味</button>
+      <button onclick="toggleReading()">読み仮名表示切替</button>
+      <select onchange="setLevel(this.value)">
+        <option value="all">すべての難易度</option>
+        <option value="easy">やさしい</option>
+        <option value="normal">ふつう</option>
+        <option value="hard">むずかしい</option>
+      </select>
+    </div>
 
-  <div class="controls">
-    <button onclick="setMode('meaning')">意味から四字熟語</button>
-    <button onclick="setMode('word')">四字熟語から意味</button>
-    <button onclick="toggleReading()">読み仮名切替</button>
-    <select onchange="setLevel(this.value)">
-      <option value="all">すべての難易度</option>
-      <option value="easy">やさしい</option>
-      <option value="normal">ふつう</option>
-      <option value="hard">むずかしい</option>
-    </select>
+    <div id="status">
+      <span id="questionNumber">問題: 0 / 10</span>
+      <span id="score">正解: 0</span>
+    </div>
+
+    <div id="question" class="question">ここに問題が表示されます</div>
+
+    <div id="choices" class="choices"></div>
+
+    <div id="result" class="result"></div>
+
+    <img id="turtle" src="" alt="リクガメ" class="turtle">
+
+    <h2>履歴</h2>
+    <ul id="historyList"></ul>
+
+    <h2>正解推移グラフ</h2>
+    <canvas id="scoreChart" width="400" height="200"></canvas>
   </div>
 
-  <div id="status">
-    <span id="questionNumber">問題: 0 / 10</span>
-    <span id="score">正解: 0</span>
-  </div>
-
-  <div id="question" class="question">ここに問題が表示されます</div>
-
-  <div id="choices" class="choices"></div>
-
-  <div id="result" class="result"></div>
-
-  <img id="turtle" src="baby_turtle.png" alt="リクガメ" class="turtle">
-
-  <h2>履歴</h2>
-  <ul id="historyList"></ul>
-
-  <h2>正解推移グラフ</h2>
-  <canvas id="scoreChart" width="400" height="200"></canvas>
-</div>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
