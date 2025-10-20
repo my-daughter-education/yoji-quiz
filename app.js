@@ -302,13 +302,10 @@ if (isCorrect) {
   score++;
   resultDiv.textContent = '正解！';
   
-  const turtleImg = document.getElementById('turtle');
-  if (score <=3) turtleImg.src='baby_turtle.png';
-  else if (score<=6) turtleImg.src='middle_turtle.png';
-  else turtleImg.src='adult_turtle.png';
-
-  turtleImg.classList.add('walk');  // ←ここで歩くアニメ追加
-  setTimeout(()=> turtleImg.classList.remove('walk'), 2000); // 2秒でアニメ終了
+const turtleImg = document.getElementById('turtle');
+turtleImg.src = 'baby_turtle.png';
+turtleImg.classList.add('walk');
+setTimeout(() => turtleImg.classList.remove('walk'), 2000);
 } else {
     btn.classList.add('wrong');
     resultDiv.textContent = `不正解… 正解は「${correctAnswer}」`;
@@ -388,5 +385,6 @@ function shuffleArray(array){
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
 
 
